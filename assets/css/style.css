@@ -644,15 +644,25 @@ nav a:hover {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  padding: 0 20px 0 20px;
 }
 .container.maps iframe {
   width: 100%;
   height: auto;
-  aspect-ratio: 16;
+  aspect-ratio: 16 / 9;
   border: 0;
   margin-bottom: 20px;
 }
-
+.container.maps button {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #53b956;
+}
 .footer-brand {
   color: #fff;
 }
@@ -862,7 +872,7 @@ nav a:hover {
     grid-template-columns: 1fr 1fr;
   }
   .maps {
-    width: 300px;
+    width: 500px;
   }
   .modal-layout {
     grid-template-columns: 1fr;
@@ -901,9 +911,6 @@ nav a:hover {
     grid-template-columns: 1fr;
   }
   .maps {
-    grid-template-columns: 1fr;
-  }
-  .container.maps iframe {
     grid-template-columns: 1fr;
   }
   .product-tools {
