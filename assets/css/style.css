@@ -903,6 +903,9 @@ nav a:hover {
   .maps {
     grid-template-columns: 1fr;
   }
+  .container.maps iframe {
+    grid-template-columns: 1fr;
+  }
   .product-tools {
     grid-template-columns: 1fr;
   }
