@@ -7,6 +7,8 @@
   --muted: #6c7685;
   --line: #e5e8ed;
   --white: #fff;
+  --green: #45dd64;
+  --green2: #6aef85;
   --shadow: 0 18px 55px rgba(16, 35, 63, 0.1);
 }
 * {
@@ -185,6 +187,16 @@ nav a:hover {
 .btn-primary:hover {
   background: var(--navy2);
   transform: translateY(-2px);
+}
+.btn-green {
+  background: var(--green);
+  color: #fff;
+  text-align: center;
+}
+.btn-green:hover {
+  background: var(--green2);
+  transform: translateY(-2px);
+  text-align: end;
 }
 .btn-outline {
   border-color: #cfd5dd;
