@@ -644,7 +644,6 @@ nav a:hover {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px 0 20px;
 }
 .container.maps iframe {
   width: 100%;
@@ -653,16 +652,7 @@ nav a:hover {
   border: 0;
   margin-bottom: 20px;
 }
-.container.maps button {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  margin-top: 10px;
-  padding: 8px 16px;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: #53b956;
-}
+
 .footer-brand {
   color: #fff;
 }
