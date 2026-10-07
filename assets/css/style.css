@@ -872,7 +872,7 @@ nav a:hover {
     grid-template-columns: 1fr 1fr;
   }
   .maps {
-    width: 400px;
+    width: 350px;
   }
   .modal-layout {
     grid-template-columns: 1fr;
