@@ -853,14 +853,14 @@ nav a:hover {
   .product-tools {
     margin-top: 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 2fr;
   }
   .search-box {
     width: auto;
   }
   .category-grid,
   .product-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
   }
   .cta-inner {
     display: block;
@@ -872,7 +872,7 @@ nav a:hover {
     grid-template-columns: 1fr 1fr;
   }
   .maps {
-    width: 350px;
+    width: 500px;
   }
   .modal-layout {
     grid-template-columns: 1fr;
@@ -897,10 +897,34 @@ nav a:hover {
   .trust-row {
     gap: 20px;
   }
-  .category-grid,
-  .product-grid {
+  .category-grid {
     grid-template-columns: 1fr;
   }
+
+  /* Tetap 2 kolom di HP dengan jarak (gap) lebih rapat */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* Penyesuaian tinggi & font kartu produk agar pas di HP */
+  .product-visual {
+    height: 140px;
+  }
+
+  .product-info {
+    padding: 12px;
+  }
+
+  .product-info h3 {
+    font-size: 14px;
+  }
+
+  .product-info p {
+    font-size: 11px;
+    min-height: auto;
+  }
+
   .product-visual {
     height: 180px;
   }
