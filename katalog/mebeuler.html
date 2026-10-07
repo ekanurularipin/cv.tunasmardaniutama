@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Katalog produk ATK CV Tunas Mardani Utama - solusi pengadaan barang untuk instansi, perusahaan, dan sekolah."
+    />
+    <title>Katalog ATK | CV. Tunas Mardani Utama</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <div class="container nav-wrap">
+        <a
+          class="brand"
+          href="../index.html"
+          aria-label="CV Tunas Mardani Utama"
+        >
+          <span class="brand-mark">
+            <img src="../assets/img/logo.png" alt="Logo" />
+          </span>
+          <span><strong>CV.Tunas</strong><small>MARDANI UTAMA</small></span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Buka menu">
+          ☰
+        </button>
+        <nav id="mainNav">
+          <a href="../index.html">Beranda</a>
+          <a href="#produk">Katalog ATK</a>
+          <a href="https://cvtunasmardaniutama-admin.vercel.app/auth/sign-in"
+            >Login</a
+          >
+          <a class="nav-download" href="#" id="downloadCatalog">
+            Download Katalog
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Section Daftar Produk (Khusus ATK) -->
+      <section class="section products-section" id="produk">
+        <div class="container">
+          <div class="section-heading product-heading">
+            <div>
+              <span class="eyebrow">PRODUCT CATALOG</span>
+              <h2>Katalog Mebeuler</h2>
+            </div>
+          </div>
+          <div class="active-filter" id="activeFilter"></div>
+
+          <!-- Atribut data-category="atk" ditambahkan di sini -->
+          <div
+            class="product-grid"
+            id="productGrid"
+            data-category="mebeuler"
+          ></div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <div>⌕</div>
+            <h3>Produk tidak ditemukan</h3>
+            <p>Belum ada produk untuk kategori Mebeuler.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section CTA Whatsapp -->
+      <section class="cta-section" id="kontak">
+        <div class="container cta-inner">
+          <div>
+            <span class="eyebrow">BUTUH PENAWARAN?</span>
+            <h2>Diskusikan kebutuhan pengadaan Anda.</h2>
+            <p>
+              Kirim nama produk atau kebutuhan Anda melalui WhatsApp. Tim kami
+              siap membantu.
+            </p>
+          </div>
+          <a
+            class="btn btn-light"
+            id="ctaWhatsapp"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >
+            Chat WhatsApp <span>↗</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#top">
+            <span class="brand-mark">
+              <img src="../assets/img/logo.png" alt="Logo" />
+            </span>
+            <span><strong>CV.Tunas</strong><small>MARDANI UTAMA</small></span>
+          </a>
+          <p>Solusi pengadaan barang untuk kebutuhan profesional.</p>
+        </div>
+        <div>
+          <h4>Menu</h4>
+          <a href="../index.html">Beranda</a>
+          <a href="#produk">Katalog ATK</a>
+        </div>
+        <div>
+          <h4>Kontak</h4>
+          <span>WhatsApp: 0812-3456-7890</span>
+          <span>Email: info@primapengadaan.id</span>
+          <span>Bandung, Jawa Barat</span>
+        </div>
+      </div>
+
+      <div class="container copyright">
+        <a href="https://www.instagram.com/ekanurularipin/">
+          © <span id="year"></span> eka nurularipin . All rights reserved.
+        </a>
+      </div>
+    </footer>
+
+    <!-- Modal Detail Produk -->
+    <div class="modal" id="productModal" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalName"
+      >
+        <button class="modal-close" id="modalClose" aria-label="Tutup">
+          ×
+        </button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <!-- Script External & Aplikasi -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/products.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/pdf-catalog.js"></script>
+  </body>
+</html>
