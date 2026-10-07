@@ -75,54 +75,67 @@ function productCard(p) {
 }
 
 function renderCategories() {
-  $("categoryGrid").innerHTML = CATEGORIES.map(
-    (c) => `
-    <button class="category-card ${selectedCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}">
-      <span>${escapeHtml(c.icon || "◆")}</span>
-      <div><strong>${escapeHtml(c.name)}</strong><small>${escapeHtml(c.description || "")}</small></div>
-      <b>→</b>
-    </button>`,
-  ).join("");
-
-  categorySelect.innerHTML =
-    '<option value="all">Semua Kategori</option>' +
-    CATEGORIES.map(
-      (c) =>
-        `<option value="${escapeHtml(c.id)}">${escapeHtml(c.name)}</option>`,
+  const categoryGrid = $("categoryGrid");
+  if (categoryGrid) {
+    categoryGrid.innerHTML = CATEGORIES.map(
+      (c) => `
+      <button class="category-card ${selectedCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}">
+        <span>${escapeHtml(c.icon || "◆")}</span>
+        <div><strong>${escapeHtml(c.name)}</strong><small>${escapeHtml(c.description || "")}</small></div>
+        <b>→</b>
+      </button>`,
     ).join("");
-  categorySelect.value = selectedCategory;
+  }
+
+  if (categorySelect) {
+    categorySelect.innerHTML =
+      '<option value="all">Semua Kategori</option>' +
+      CATEGORIES.map(
+        (c) =>
+          `<option value="${escapeHtml(c.id)}">${escapeHtml(c.name)}</option>`,
+      ).join("");
+    categorySelect.value = selectedCategory;
+  }
 }
 
 function renderProducts() {
-  const q = searchInput.value.trim().toLowerCase();
+  if (!productGrid) return;
+
+  const q = searchInput ? searchInput.value.trim().toLowerCase() : "";
   const filtered = PRODUCTS.filter((p) => {
+    // Cocokkan ID kategori Supabase atau Slug / Nama kategori (seperti 'atk')
     const matchesCategory =
-      selectedCategory === "all" || p.categoryId === selectedCategory;
+      selectedCategory === "all" ||
+      p.categoryId === selectedCategory ||
+      p.category.toLowerCase().includes(selectedCategory.toLowerCase());
+
     const haystack =
       `${p.name} ${p.id} ${p.category} ${p.desc} ${p.description}`.toLowerCase();
     return matchesCategory && (!q || haystack.includes(q));
   });
 
   productGrid.innerHTML = filtered.map(productCard).join("");
-  emptyState.hidden = filtered.length !== 0;
+  if (emptyState) emptyState.hidden = filtered.length !== 0;
 
-  activeFilter.innerHTML =
-    selectedCategory === "all" && !q
-      ? ""
-      : `<span>Filter aktif:</span> ${selectedCategory !== "all" ? `<b>${escapeHtml(CATEGORIES.find((c) => c.id === selectedCategory)?.name || "")}</b>` : ""}${q ? `<b>“${escapeHtml(q)}”</b>` : ""}<button id="clearFilter">Reset ×</button>`;
+  if (activeFilter) {
+    activeFilter.innerHTML =
+      selectedCategory === "all" && !q
+        ? ""
+        : `<span>Filter aktif:</span> ${selectedCategory !== "all" ? `<b>${escapeHtml(CATEGORIES.find((c) => c.id === selectedCategory)?.name || selectedCategory.toUpperCase())}</b>` : ""}${q ? `<b>“${escapeHtml(q)}”</b>` : ""}<button id="clearFilter">Reset ×</button>`;
+
+    $("clearFilter")?.addEventListener("click", () => {
+      selectedCategory = "all";
+      if (searchInput) searchInput.value = "";
+      renderCategories();
+      renderProducts();
+    });
+  }
 
   document
     .querySelectorAll("[data-id]")
     .forEach((el) =>
       el.addEventListener("click", () => openModal(el.dataset.id)),
     );
-
-  $("clearFilter")?.addEventListener("click", () => {
-    selectedCategory = "all";
-    searchInput.value = "";
-    renderCategories();
-    renderProducts();
-  });
 }
 
 function openModal(dbId) {
@@ -213,7 +226,9 @@ function closeModal() {
 }
 
 function showError(message) {
-  productGrid.innerHTML = `<div class="empty-state" style="display:block;grid-column:1/-1"><div>!</div><h3>Data katalog belum dapat dimuat</h3><p>${escapeHtml(message)}</p><p style="margin-top:10px">Periksa SUPABASE_URL, ANON KEY, tabel, dan RLS Supabase.</p></div>`;
+  if (productGrid) {
+    productGrid.innerHTML = `<div class="empty-state" style="display:block;grid-column:1/-1"><div>!</div><h3>Data katalog belum dapat dimuat</h3><p>${escapeHtml(message)}</p><p style="margin-top:10px">Periksa SUPABASE_URL, ANON KEY, tabel, dan RLS Supabase.</p></div>`;
+  }
 }
 
 async function loadCatalog() {
@@ -251,15 +266,25 @@ async function loadCatalog() {
 
     if (COMPANY) applyCompanyProfile(COMPANY);
 
+    // Cek apakah ada target kategori spesifik dari HTML (misal data-category="atk")
+    const targetCategory = productGrid?.dataset?.category;
+    if (targetCategory) {
+      const foundCategory = CATEGORIES.find(
+        (c) =>
+          c.slug === targetCategory ||
+          c.name.toLowerCase().includes(targetCategory.toLowerCase()),
+      );
+      selectedCategory = foundCategory ? foundCategory.id : targetCategory;
+    }
+
     renderCategories();
     renderProducts();
 
-    const countProducts = PRODUCTS.length;
-    const countCategories = CATEGORIES.length;
-    document.querySelectorAll(".trust-row strong")[0].textContent =
-      `${countProducts}+`;
-    document.querySelectorAll(".trust-row strong")[1].textContent =
-      countCategories;
+    const trustRowElements = document.querySelectorAll(".trust-row strong");
+    if (trustRowElements.length >= 2) {
+      trustRowElements[0].textContent = `${PRODUCTS.length}+`;
+      trustRowElements[1].textContent = CATEGORIES.length;
+    }
   } catch (error) {
     console.error("Supabase catalog error:", error);
     showError(
@@ -307,39 +332,53 @@ function applyCompanyProfile(c) {
 
 document.addEventListener("click", (e) => {
   const cat = e.target.closest("[data-category]");
-  if (cat) {
+  if (cat && cat.dataset.category) {
     selectedCategory = cat.dataset.category;
     renderCategories();
     renderProducts();
-    document.querySelector("#produk").scrollIntoView({ behavior: "smooth" });
+    $("produk")?.scrollIntoView({ behavior: "smooth" });
   }
 });
 
-searchInput.addEventListener("input", renderProducts);
-categorySelect.addEventListener("change", (e) => {
-  selectedCategory = e.target.value;
-  renderCategories();
-  renderProducts();
-});
-$("modalClose").addEventListener("click", closeModal);
+if (searchInput) searchInput.addEventListener("input", renderProducts);
+if (categorySelect) {
+  categorySelect.addEventListener("change", (e) => {
+    selectedCategory = e.target.value;
+    renderCategories();
+    renderProducts();
+  });
+}
+
+$("modalClose")?.addEventListener("click", closeModal);
 document
   .querySelector('[data-close="true"]')
-  .addEventListener("click", closeModal);
+  ?.addEventListener("click", closeModal);
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModal();
 });
-$("ctaWhatsapp").href = waLink(
-  "Halo CV Tunas Mardani Utama, saya ingin berkonsultasi mengenai kebutuhan pengadaan barang.",
-);
-$("year").textContent = new Date().getFullYear();
-$("navToggle").addEventListener("click", () =>
-  document.querySelector("#mainNav").classList.toggle("open"),
-);
+
+const ctaWhatsapp = $("ctaWhatsapp");
+if (ctaWhatsapp) {
+  ctaWhatsapp.href = waLink(
+    "Halo CV Tunas Mardani Utama, saya ingin berkonsultasi mengenai kebutuhan pengadaan barang.",
+  );
+}
+
+const yearEl = $("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+const navToggle = $("navToggle");
+if (navToggle) {
+  navToggle.addEventListener("click", () =>
+    document.querySelector("#mainNav")?.classList.toggle("open"),
+  );
+}
+
 document
   .querySelectorAll("#mainNav a")
   .forEach((a) =>
     a.addEventListener("click", () =>
-      document.querySelector("#mainNav").classList.remove("open"),
+      document.querySelector("#mainNav")?.classList.remove("open"),
     ),
   );
 
