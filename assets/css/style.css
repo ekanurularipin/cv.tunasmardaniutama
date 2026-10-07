@@ -863,6 +863,15 @@ nav a:hover {
   }
   .maps {
     width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .container.maps iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16;
+    border: 0;
+    margin-bottom: 20px;
   }
   .modal-layout {
     grid-template-columns: 1fr;
